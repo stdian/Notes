@@ -31,17 +31,13 @@ public class Window extends JFrame {
 		pack();
 
 		setTitle("Notes");
+		setLocationRelativeTo(null);
 		setResizable(false);
 		setVisible(true);
 	}
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new Window();
-			}
-		});
+		SwingUtilities.invokeLater(() -> new Window());
 	}
 
 }

@@ -29,6 +29,7 @@ public class NotePanel extends JPanel {
 		try {
 			Scanner sc = new Scanner(file);
 			noteTitle.setText(title);
+			window.setTitle(title);
 			String txt = "";
 			while (sc.hasNextLine()) {
 				txt += sc.nextLine() + "\n";
@@ -74,27 +75,34 @@ public class NotePanel extends JPanel {
 
 		exitButton.addActionListener(e -> closeNote());
 
-		saveButton.addActionListener(e -> {
-			String title = noteTitle.getText();
-			String text = noteArea.getText();
-			try {
-				FileWriter writer = new FileWriter("notes/" + title + ".txt");
-				writer.write(text);
-				writer.flush();
-				writer.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			window.mainPanel.getNotes();
-			DefaultListModel model = new DefaultListModel();
-			for (int i = 0; i < window.mainPanel.notes.length; i++) {
-				model.add(i, window.mainPanel.notes[i]);
-			}
-			window.mainPanel.noteList.setModel(model);
-			closeNote();
-		});
+		saveButton.addActionListener(e -> saveNote());
 
-		removeButton.addActionListener(e -> {
+		removeButton.addActionListener(e -> removeNote());
+	}
+
+	private void saveNote() {
+		String title = noteTitle.getText();
+		String text = noteArea.getText();
+		try {
+			FileWriter writer = new FileWriter("notes/" + title + ".txt");
+			writer.write(text);
+			writer.flush();
+			writer.close();
+			JOptionPane.showMessageDialog(window, "Note saved successfully!", "Info", JOptionPane.INFORMATION_MESSAGE);
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(window, e1.toString(), "Info", JOptionPane.ERROR_MESSAGE);
+		}
+		window.mainPanel.getNotes();
+		DefaultListModel model = new DefaultListModel();
+		for (int i = 0; i < window.mainPanel.notes.length; i++) {
+			model.add(i, window.mainPanel.notes[i]);
+		}
+		window.mainPanel.noteList.setModel(model);
+		closeNote();
+	}
+
+	private void removeNote() {
+		try {
 			System.gc();
 			File file = new File("notes/" + window.mainPanel.noteList.getSelectedValue() + ".txt").getAbsoluteFile();
 			if (file.delete()) {
@@ -106,10 +114,13 @@ public class NotePanel extends JPanel {
 				window.mainPanel.noteList.setModel(model);
 				closeNote();
 			}
-		});
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(window, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void closeNote() {
+		window.setTitle("Notes");
 		window.getContentPane().removeAll();
 		window.getContentPane().add(window.mainPanel);
 		window.repaint();
@@ -119,6 +130,7 @@ public class NotePanel extends JPanel {
 	public void newNote() {
 		noteTitle.setText("Untitled");
 		noteArea.setText("");
+		window.setTitle("Untitled");
 		removeButton.setEnabled(false);
 	}
 
