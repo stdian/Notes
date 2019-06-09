@@ -1,5 +1,6 @@
 package ru.stdian.app.panels;
 
+import ru.stdian.app.Notifications;
 import ru.stdian.app.Window;
 
 import javax.swing.*;
@@ -88,9 +89,9 @@ public class NotePanel extends JPanel {
 			writer.write(text);
 			writer.flush();
 			writer.close();
-			JOptionPane.showMessageDialog(window, "Note saved successfully!", "Info", JOptionPane.INFORMATION_MESSAGE);
+			Notifications.showInfoNotification("Info", "Note saved successfully!");
 		} catch (IOException e1) {
-			JOptionPane.showMessageDialog(window, e1.toString(), "Info", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(window, e1.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		window.mainPanel.getNotes();
 		DefaultListModel model = new DefaultListModel();

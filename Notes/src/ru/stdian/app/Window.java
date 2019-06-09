@@ -1,7 +1,7 @@
 package ru.stdian.app;
 
 import javax.swing.*;
-import  ru.stdian.app.panels.*;
+import ru.stdian.app.panels.*;
 
 import java.awt.*;
 
@@ -37,7 +37,7 @@ public class Window extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> new Window());
+		SwingUtilities.invokeLater(Window::new);
 	}
 
 }
