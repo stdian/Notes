@@ -15,15 +15,49 @@ import java.util.Scanner;
 public class NotePanel extends JPanel {
 
 	private Window window;
-	private JTextArea noteArea;
+	public JTextArea noteArea;
 	private JTextArea noteTitle;
+	public Thread thread1;
+	public Thread thread2;
 
+	private JButton saveButton;
+	private JButton exitButton;
 	private JButton removeButton;
 
 	public NotePanel(Window window) {
 		this.window = window;
 		init();
 	}
+
+
+	public void initThread() {
+		noteTitle.setBounds(10, -35, 375, 25);
+		exitButton.setBounds(10, -30, 75, 25);
+		removeButton.setBounds(180, -30, 75, 25);
+		saveButton.setBounds(95, -30, 75, 25);
+		noteArea.setBounds(10, 90, 375, 570);
+
+		thread1 = new Thread(() -> {
+			try {
+				for (int i = 710; i >= 90; i-=2) {
+					Thread.sleep(1);
+					noteArea.setBounds(10, i, 375, 570);
+				}
+			} catch (Exception ignored) {}
+		});
+		thread2 = new Thread(() -> {
+			try {
+				for (int i = -75; i <= 10; i++) {
+					Thread.sleep(4);
+					exitButton.setBounds(10, i, 75, 25);
+					saveButton.setBounds(95, i, 75, 25);
+					removeButton.setBounds(180, i, 75, 25);
+					noteTitle.setBounds(10, i + 40, 375, 25);
+				}
+			} catch (Exception ignored) {}
+		});
+	}
+
 
 	public void getNote(String title) {
 		File file = new File("notes/" + title + ".txt");
@@ -36,6 +70,9 @@ public class NotePanel extends JPanel {
 				txt += sc.nextLine() + "\n";
 			}
 			noteArea.setText(txt);
+			initThread();
+			thread1.start();
+			thread2.start();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}
@@ -55,23 +92,23 @@ public class NotePanel extends JPanel {
 	private void addNoteTitle() {
 		noteTitle = new JTextArea();
 		noteTitle.setFont(new Font("Arial", Font.BOLD, 16));
-		noteTitle.setBounds(10, 50, 375, 25);
+		noteTitle.setBounds(10, -35, 375, 25);
 		noteTitle.setBorder(new LineBorder(Color.BLACK, 2));
 
 		add(noteTitle);
 	}
 
 	private void addButtons() {
-		JButton exitButton = new JButton("Exit");
-		exitButton.setBounds(10, 10, 75, 25);
+		exitButton = new JButton("Exit");
+		exitButton.setBounds(10, -30, 75, 25);
 		add(exitButton);
 
-		JButton saveButton = new JButton("Save");
-		saveButton.setBounds(95, 10, 75, 25);
+		saveButton = new JButton("Save");
+		saveButton.setBounds(95, -30, 75, 25);
 		add(saveButton);
 
 		removeButton = new JButton("Remove");
-		removeButton.setBounds(180, 10, 75, 25);
+		removeButton.setBounds(180, -30, 75, 25);
 		add(removeButton);
 
 		exitButton.addActionListener(e -> closeNote());
@@ -129,6 +166,9 @@ public class NotePanel extends JPanel {
 	}
 
 	public void newNote() {
+		initThread();
+		thread1.start();
+		thread2.start();
 		noteTitle.setText("Untitled");
 		noteArea.setText("");
 		window.setTitle("Untitled");

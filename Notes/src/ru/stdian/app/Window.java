@@ -1,9 +1,8 @@
 package ru.stdian.app;
 
 import javax.swing.*;
-import ru.stdian.app.panels.*;
-
 import java.awt.*;
+import ru.stdian.app.panels.*;
 
 public class Window extends JFrame {
 
